@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Restaurant Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <h1>Restaurant Recommender</h1>
+            </div>
+            <nav>
+                <a href="/" class="nav-btn">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/recommend" class="nav-btn">
+                    <i class="fas fa-search"></i> Get Recommendations
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="form-container fade-in">
+            <h2>
+                <i class="fas fa-search"></i> Find Your Perfect Restaurant
+            </h2>
+            <p>Enter the name of a restaurant you love, and we'll recommend similar places with excellent ratings!</p>
+            
+            <form action="/result" method="post" class="search-form">
+                <div class="input-group">
+                    <label for="restaurant_name">
+                        <i class="fas fa-utensils"></i> Restaurant Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="restaurant_name" 
+                        name="restaurant_name" 
+                        class="search-input" 
+                        placeholder="e.g., Pizza Palace, Sushi Master, Burger House..."
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+                
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-magic"></i> Get Recommendations
+                </button>
+            </form>
+
+            <div class="tips-section">
+                <h3>
+                    <i class="fas fa-lightbulb"></i> Tips for Better Recommendations
+                </h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-star"></i>
+                        <p>Enter popular restaurant names for more accurate results</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Our system works best with well-known establishments</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-clock"></i>
+                        <p>Results are sorted by rating and popularity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group label i {
+            color: #667eea;
+        }
+
+        .tips-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .tips-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tips-section h3 i {
+            color: #f39c12;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tip-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .tip-card i {
+            font-size: 1.2rem;
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .tip-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('restaurant_name');
+            const form = document.querySelector('.search-form');
+            
+            // Add focus effect
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+            
+            // Add form submission loading state
+            form.addEventListener('submit', function() {
+                const submitBtn = this.querySelector('.search-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<div class="loading"></div> Finding Recommendations...';
+                submitBtn.disabled = true;
+                
+                // Re-enable after a delay (in case of error)
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
